@@ -1,0 +1,90 @@
+<html>
+	<head>
+		<meta charset="UTF-8"></meta>
+		<script type="text/javascript">
+
+			var spades = '♠'; 
+			var hearts = '♥'; 
+			var diamonds = '♦';	
+			var clubs = '♣';
+
+			var suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+			var values = ['ace', 'king', 'queen', 'jack', '10', '9', '8', '7', '6']
+
+			function getRandomInt(max) {
+  				return Math.floor(Math.random() * Math.floor(max));
+			}
+			
+			function createDeck() {
+				
+				var Card = function(suit, value) {
+					console.log('constr1')
+					this.suit = suit;
+					this.value = value;
+				}
+
+				Card.prototype.toString = function () {
+					var strSuit;
+					var strValue;
+
+					if (this.suit == 'hearts') {
+						strSuit = hearts;
+					} else if (this.suit == 'diamonds') {
+						strSuit = spades;
+					} else if (this.suit == 'spades') {
+						strSuit = clubs;
+					} else if (this.suit == 'clubs') {
+						strSuit = diamonds;
+					} else {
+						strSuit = 'UNKNOWN';
+					}
+
+
+					if (this.value == 'ace') {
+						strValue = 'A';
+					} else if (this.value == 'queen') {
+						strValue = 'Q';
+					} else if (this.value == 'king') {
+						strValue = 'K';
+					} else if (this.value == 'jack') {
+						strValue = 'J';
+					} else {
+						strValue = this.value;
+					} 
+
+					return strValue + strSuit;
+				}
+
+				var Deck = function () {
+					this.cards = [];
+					
+					for (var i = 0; i < 36; i++) {
+						var suit = suits[Math.floor(i / values.length)];
+
+						var value = values[i % values.length];
+						this.cards[i] = new Card(suit, value);
+					}
+
+					this.shuffle = function () {
+						for (var i = 0; i < 36; i++) {
+							var randomIndex = getRandomInt(36);
+							var temp = this.cards[i];
+							this.cards[i] = this.cards[randomIndex];
+							this.cards[randomIndex] = temp;
+						}
+					}
+
+				};
+
+				var deck = new Deck();
+				alert(deck.cards);
+				deck.shuffle();
+				alert(deck.cards);
+			}
+
+		</script>
+	</head>
+	<body onload="createDeck()">
+		
+	</body>
+</html>
