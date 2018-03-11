@@ -2,6 +2,7 @@
 	<head>
 		<meta charset="UTF-8"></meta>
 		<script type="text/javascript">
+			var deck_size = 36;
 
 			var spades = '♠'; 
 			var hearts = '♥'; 
@@ -13,6 +14,65 @@
 
 			function getRandomInt(max) {
   				return Math.floor(Math.random() * Math.floor(max));
+			}
+
+			function translateSuit(suit) {
+				if (suit == 'hearts') {
+					return hearts;
+				} else if (suit == 'diamonds') {
+					return diamonds;
+				} else if (suit == 'spades') {
+					return spades;
+				} else if (suit == 'clubs') {
+					return clubs;
+				} else {
+					return 'UNKNOWN';
+				}
+			}
+
+			function translateValue(cardValue) {
+				if (cardValue == 'ace') {
+					return 'A';
+				} else if (cardValue == 'queen') {
+					return 'Q';
+				} else if (cardValue == 'king') {
+					return 'K';
+				} else if (cardValue == 'jack') {
+					return 'J';
+				} else {
+					return cardValue;
+				}
+			}
+
+			function suitColor(suit) {
+				
+				if (suit == 'diamonds' || suit == 'hearts') {
+					return 'red';
+				} else {
+					return 'black';
+				}
+			}
+
+			function drawCard(position, card) {
+				var cardElement = document.createElement('div');
+				var cardValueElement = document.createElement('div');
+				var cardSuitElement = document.createElement('div');
+
+				cardElement.id = position;
+				cardElement.className = 'card';
+
+				cardValueElement.className = 'card_value';
+				cardSuitElement.className = 'card_suit';
+
+				cardElement.appendChild(cardValueElement);
+				cardElement.appendChild(cardSuitElement);
+
+				cardValueElement.appendChild(document.createTextNode(translateValue(card.value)));
+				cardSuitElement.appendChild(document.createTextNode(translateSuit(card.suit)));
+
+				cardSuitElement.classList.add(suitColor(card.suit));
+
+				document.getElementById("center_pane").appendChild(cardElement);
 			}
 			
 			function createDeck() {
@@ -27,38 +87,18 @@
 					var strSuit;
 					var strValue;
 
-					if (this.suit == 'hearts') {
-						strSuit = hearts;
-					} else if (this.suit == 'diamonds') {
-						strSuit = spades;
-					} else if (this.suit == 'spades') {
-						strSuit = clubs;
-					} else if (this.suit == 'clubs') {
-						strSuit = diamonds;
-					} else {
-						strSuit = 'UNKNOWN';
-					}
-
-
-					if (this.value == 'ace') {
-						strValue = 'A';
-					} else if (this.value == 'queen') {
-						strValue = 'Q';
-					} else if (this.value == 'king') {
-						strValue = 'K';
-					} else if (this.value == 'jack') {
-						strValue = 'J';
-					} else {
-						strValue = this.value;
-					} 
+					strSuit = translateSuit(this.suit);
+					strValue = translateValue(this.value);
 
 					return strValue + strSuit;
 				}
 
+
+
 				var Deck = function () {
 					this.cards = [];
 					
-					for (var i = 0; i < 36; i++) {
+					for (var i = 0; i < deck_size; i++) {
 						var suit = suits[Math.floor(i / values.length)];
 
 						var value = values[i % values.length];
@@ -66,8 +106,8 @@
 					}
 
 					this.shuffle = function () {
-						for (var i = 0; i < 36; i++) {
-							var randomIndex = getRandomInt(36);
+						for (var i = 0; i < deck_size; i++) {
+							var randomIndex = getRandomInt(deck_size);
 							var temp = this.cards[i];
 							this.cards[i] = this.cards[randomIndex];
 							this.cards[randomIndex] = temp;
@@ -77,14 +117,82 @@
 				};
 
 				var deck = new Deck();
-				alert(deck.cards);
+				console.log(deck.cards);
 				deck.shuffle();
-				alert(deck.cards);
+				console.log(deck.cards);
+
+				drawCard('first', deck.cards[0]);
+				drawCard('second', deck.cards[1]);
+				drawCard('third', deck.cards[2]);
+				drawCard('fourth', deck.cards[3]);
 			}
 
 		</script>
+		<style type="text/css">
+			.column {height: 100%; float: left;}
+			.switcher {background: #cfeadc; width: 15%;}
+			.center_pane {width: 70%;}
+
+			.switcher_element_container {height: 10%; background: red; cursor: hand;}
+
+			.card {height: 30%; width: 15%; border: solid; border-color: black; position: relative; margin: 5px 5px;}
+
+			div#first {float: left; margin-left: 30%;}
+			div#second {float: left;}
+			div#third {clear: both; float: left; margin-left: 30%;}
+			div#fourth {float: left;}
+
+			.card_suit {position: absolute; top: 40%; width: 100%; text-align: center; font-size: 3rem;}
+
+			.red {color: red;}
+
+			.card_value {position: absolute; margin: 3%; font-size: 1.2rem;}
+
+			html {font-size: 100%;}
+		</style>
 	</head>
 	<body onload="createDeck()">
-		
+		<div class="column switcher">
+			<div class="switcher_element_container">
+			</div>
+		</div>
+		<div  class="column center_pane" id="center_pane">
+			<!-- div id="first" class="card">
+				<div class="card_value">
+					10
+				</div>
+				<div class="card_suit red">
+					♠
+				</div>
+			</div -->
+			<!-- div id="second" class="card">
+				<div class="card_value">
+					10
+				</div>
+				<div class="card_suit">
+					♠
+				</div>
+			</div>
+			<div id="third" class="card">
+				<div class="card_value">
+					10
+				</div>
+				<div class="card_suit">
+					♠
+				</div>
+			</div>
+			<div id="fourth" class="card">
+				<div class="card_value">
+					10
+				</div>
+				<div class="card_suit">
+					♠
+				</div>
+			</div-->
+		</div>
+		<div  class="column switcher">
+			<div class="switcher_element_container">
+			</div>
+		</div>
 	</body>
 </html>
